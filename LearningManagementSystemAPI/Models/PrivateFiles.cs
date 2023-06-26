@@ -12,7 +12,7 @@ namespace LearningManagementSystemAPI.Models
         public string FileName { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
-        public int Size { get; set; }
+        public double Size { get; set; }
         public int AccountId { get; set; }
         public Account Account { get; set; }
     }

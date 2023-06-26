@@ -1,4 +1,6 @@
 using LearningManagementSystemAPI.Context;
+using LearningManagementSystemAPI.Helpers;
+using LearningManagementSystemAPI.Models;
 using LearningManagementSystemAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -53,7 +55,14 @@ builder.Services.AddDbContext<LmsContext>(options =>
 
 builder.Services.AddAutoMapper(typeof(Program));
 
+builder.Services.AddScoped<GenerateToken>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IClassService, ClassService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IPrivateFilesService, PrivateFilesService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+builder.Services.AddScoped<ISubjectService, SubjectService>();
 
 //JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
