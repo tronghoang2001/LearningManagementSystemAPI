@@ -6,7 +6,7 @@ namespace LearningManagementSystemAPI.DTOs
     {
         public string Code { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string Sender { get; set; }
         public DateTime SentDate { get; set; }
         public int Status { get; set; }
     }

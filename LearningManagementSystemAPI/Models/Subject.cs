@@ -14,10 +14,14 @@ namespace LearningManagementSystemAPI.Models
         [MaxLength(50)]
         public string Name { get; set; }
         public string Description { get; set; }
+        [MaxLength(100)]
+        public string FileName { get; set; }
+        [MaxLength(50)]
+        public string Sender { get; set; }
         public DateTime SentDate { get; set; }
         public int Status { get; set; }
         [JsonIgnore]
-        public ICollection<ClassDetails> ClassDetails { get; set; }
+        public ICollection<ClassDetails>? ClassDetails { get; set; }
         [JsonIgnore]
         public ICollection<SubjectInformation> SubjectInformation { get; set; }
         [JsonIgnore]

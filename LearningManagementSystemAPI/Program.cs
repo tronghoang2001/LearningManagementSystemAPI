@@ -63,6 +63,9 @@ builder.Services.AddScoped<IPrivateFilesService, PrivateFilesService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
+builder.Services.AddScoped<ITopicService, TopicService>();
+builder.Services.AddScoped<ILessionService, LessonService>();
+builder.Services.AddScoped<IResourcesService, ResourcesService>();
 
 //JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

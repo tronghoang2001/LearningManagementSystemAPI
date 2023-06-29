@@ -13,7 +13,7 @@ namespace LearningManagementSystemAPI.Models
         public DateTime SentDate { get; set; }
         public int Status { get; set; }
         [MaxLength(50)]
-        public string ApprovedBy { get; set; }
+        public string? ApprovedBy { get; set; }
         public int LessonId { get; set; }
         public Lesson Lesson { get; set; }
     }

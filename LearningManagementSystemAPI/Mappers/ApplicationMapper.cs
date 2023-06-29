@@ -30,6 +30,20 @@ namespace LearningManagementSystemAPI.Mappers
             CreateMap<PrivateFiles, PrivateFilesDTO>();
             CreateMap<CreatePrivateFilesDTO, PrivateFiles>();
             CreateMap<UserUpdateAccountDTO, Account>();
+            CreateMap<Subject, SubjectDTO>();
+            CreateMap<CreateSubjectDTO, Subject>();
+            CreateMap<ApproveSubjectDTO, Subject>();
+            CreateMap<Subject, SubjectDetailsDTO>()
+                .ForMember(dest => dest.Topic_list, opt => opt.MapFrom(src => src.Topics));
+            CreateMap<CreateTopicDTO, Topic>();
+            CreateMap<UpdateTopicDTO, Topic>();
+            CreateMap<Topic, TopicDTO>()
+                .ForMember(dest => dest.Lesson, opt => opt.MapFrom(src => src.Lessons));
+            CreateMap<CreateLessonDTO, Lesson>();
+            CreateMap<Lesson, LessonDTO>()
+                .ForMember(dest => dest.Resources_list, opt => opt.MapFrom(src => src.Resources));
+            CreateMap<CreateResourcesDTO, Resources>();
+            CreateMap<Resources, ResourcesDTO>();
         }
     }
 }

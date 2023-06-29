@@ -9,14 +9,14 @@ namespace LearningManagementSystemAPI.Models
     {
         [Key]
         public int ClassDetailsId { get; set; }
-        public int ClassId { get; set; }
-        public int SubjectId { get; set; }
-        public int AccountId { get; set; }
-        public int DeparmentId { get; set; }
-        public Class Class { get; set; }
-        public Department Department { get; set; }
-        public Subject Subject { get; set; }
-        public Account Account { get; set; }
+        public int? ClassId { get; set; }
+        public int? SubjectId { get; set; }
+        public int? AccountId { get; set; }
+        public int? DeparmentId { get; set; }
+        public Class? Class { get; set; }
+        public Department? Department { get; set; }
+        public Subject? Subject { get; set; }
+        public Account? Account { get; set; }
         [JsonIgnore]
         public ICollection<Exam> Exams { get; set; }
     }

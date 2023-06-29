@@ -20,7 +20,7 @@ namespace LearningManagementSystemAPI.Services
             var privateFile = _mapper.Map<PrivateFiles>(privateFilesDTO);
             if (file != null && file.Length > 0)
             {
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                var fileName = file.FileName;
                 var filePath = Path.Combine("Uploads\\PrivateFiles", fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -44,7 +44,7 @@ namespace LearningManagementSystemAPI.Services
 
             if (privateFile != null)
             {
-                var filePath = Path.Combine("Uploads\\MenuIcon", privateFile.FileName);
+                var filePath = Path.Combine("Uploads\\PrivateFiles", privateFile.FileName);
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);
@@ -77,7 +77,7 @@ namespace LearningManagementSystemAPI.Services
                 {
                     File.Delete(filePath);
                 }
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                var fileName = file.FileName;
                 filePath = Path.Combine("Uploads\\PrivateFiles", fileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {

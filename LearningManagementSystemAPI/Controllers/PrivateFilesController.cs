@@ -17,7 +17,7 @@ namespace LearningManagementSystemAPI.Controllers
 
         [Authorize]
         [HttpGet("list-privateFiles")]
-        public async Task<IActionResult> GetAllDepartment()
+        public async Task<IActionResult> GetAllPrivateFiles()
         {
             try
             {

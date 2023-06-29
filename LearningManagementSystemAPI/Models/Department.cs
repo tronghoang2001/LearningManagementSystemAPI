@@ -12,6 +12,6 @@ namespace LearningManagementSystemAPI.Models
         [MaxLength(50)]
         public string Name { get; set; }
         [JsonIgnore]
-        public ICollection<ClassDetails> ClassDetails { get; set; }
+        public ICollection<ClassDetails>? ClassDetails { get; set; }
     }
 }
