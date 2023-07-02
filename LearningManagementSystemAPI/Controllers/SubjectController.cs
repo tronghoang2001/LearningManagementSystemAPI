@@ -38,6 +38,29 @@ namespace LearningManagementSystemAPI.Controllers
         }
 
         [Authorize(Roles = "Admin,Lecturers")]
+        [HttpGet("{subjectId}/get-documents-by-id")]
+        public async Task<IActionResult> GetDocumentsBySubjectId(int subjectId)
+        {
+            var documents = await _subjectService.GetDocumentsBySubjectIdAsync(subjectId);
+
+            if (documents == null)
+            {
+                // Xử lý khi không tìm thấy môn học
+                return NotFound();
+            }
+
+            return Ok(documents);
+        }
+
+        [Authorize(Roles = "Admin,Lecturers")]
+        [HttpGet("get-all-documents")]
+        public async Task<ActionResult<List<DocumentDTO>>> GetAllDocuments(int? subjectId, string? lecturers, int? status)
+        {
+            var documents = await _subjectService.GetAllDocumentsAsync(subjectId, lecturers, status);
+            return Ok(documents);
+        }
+
+        [Authorize(Roles = "Admin,Lecturers")]
         [HttpPost("create-subject")]
         public async Task<IActionResult> CreateSubject([FromForm] CreateSubjectDTO subjectDTO, IFormFile file)
         {

@@ -7,9 +7,9 @@ namespace LearningManagementSystemAPI.Models
     public class ExamDetails
     {
         public int ExamId { get; set; }
-        public int ExamBankId { get; set; }
+        public int QuestionBankId { get; set; }
         public Exam Exam { get; set; }
-        public ExamBank ExamBank { get; set; }
+        public QuestionBank QuestionBank { get; set; }
 
     }
 }

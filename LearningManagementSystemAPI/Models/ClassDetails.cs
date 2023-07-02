@@ -17,7 +17,5 @@ namespace LearningManagementSystemAPI.Models
         public Department? Department { get; set; }
         public Subject? Subject { get; set; }
         public Account? Account { get; set; }
-        [JsonIgnore]
-        public ICollection<Exam> Exams { get; set; }
     }
 }

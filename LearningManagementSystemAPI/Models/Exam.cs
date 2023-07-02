@@ -18,8 +18,8 @@ namespace LearningManagementSystemAPI.Models
         public int Time { get; set; }
         public int Status { get; set; }
         public DateTime CreateDate { get; set; }
-        public int ClassDetailsId { get; set; }
-        public ClassDetails ClassDetails { get; set; }
+        public int SubjectId { get; set; }
+        public Subject Subject { get; set; }
         [JsonIgnore]
         public ICollection<ExamDetails> ExamDetails { get; set; }
     }

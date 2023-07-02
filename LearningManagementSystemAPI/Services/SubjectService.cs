@@ -3,6 +3,8 @@ using LearningManagementSystemAPI.Context;
 using LearningManagementSystemAPI.DTOs;
 using LearningManagementSystemAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using System.Reflection.Metadata;
 
 namespace LearningManagementSystemAPI.Services
 {
@@ -10,6 +12,7 @@ namespace LearningManagementSystemAPI.Services
     {
         private readonly LmsContext _context;
         private readonly IMapper _mapper;
+
         public SubjectService(LmsContext context, IMapper mapper)
         {
             _context = context;
@@ -93,8 +96,50 @@ namespace LearningManagementSystemAPI.Services
             {
                 return null;
             }
-            var tintucDto = _mapper.Map<SubjectDetailsDTO>(subject);
-            return tintucDto;
+            var subjectDTO = _mapper.Map<SubjectDetailsDTO>(subject);
+            return subjectDTO;
+        }
+
+        public async Task<List<DocumentDTO>> GetDocumentsBySubjectIdAsync(int subjectId)
+        {
+            var subject = await GetSubjectByIdAsync(subjectId);
+
+            if (subject == null)
+            {
+                // Xử lý khi không tìm thấy môn học
+                return null;
+            }
+
+            var documents = new List<DocumentDTO>();
+
+            foreach (var topic in subject.Topic_list)
+            {
+                foreach (var lesson in topic.Lesson)
+                {
+                    documents.Add(new DocumentDTO
+                    {
+                        FileName = lesson.FileName,
+                        Type = "Bài giảng",
+                        Lecturers = subject.Sender,
+                        SentDate = lesson.SentDate.ToString("dd/MM/yyyy"),
+                        Status = lesson.Status
+                    });
+
+                    foreach (var resource in lesson.Resources_list)
+                    {
+                        documents.Add(new DocumentDTO
+                        {
+                            FileName = resource.FileName,
+                            Type = "Tài nguyên",
+                            Lecturers = subject.Sender,
+                            SentDate = resource.SentDate.ToString("dd/MM/yyyy"),
+                            Status = resource.Status
+                        });
+                    }
+                }
+            }
+
+            return documents;
         }
 
         public async Task<Subject> UpdateSubjectAsync(CreateSubjectDTO subjectDTO, int id, IFormFile file)
@@ -125,6 +170,46 @@ namespace LearningManagementSystemAPI.Services
             _context.Subjects.Update(subject);
             await _context.SaveChangesAsync();
             return subject;
+        }
+
+        public async Task<List<DocumentDTO>> GetAllDocumentsAsync(int? subjectId, string? lecturers, int? status)
+        {
+            var documentsQuery = _context.Lessons
+                .Include(l => l.Topic.Subject)
+                .Include(l => l.Resources)
+                .Where(l => (!subjectId.HasValue || l.Topic.SubjectId == subjectId.Value) &&
+                            (string.IsNullOrEmpty(lecturers) || l.Topic.Subject.Sender == lecturers) &&
+                            (!status.HasValue || l.Status == status.Value))
+                .Select(l => new DocumentDTO
+                {
+                    FileName = l.FileName,
+                    Type = "Bài giảng",
+                    SubjectName = l.Topic.Subject.Name, 
+                    Lecturers = l.Topic.Subject.Sender,
+                    SentDate = l.SentDate.ToString("dd/MM/yyyy"),
+                    Status = l.Status
+                });
+
+            var resourceDocumentsQuery = _context.Resources
+                .Include(r => r.Lesson.Topic.Subject)
+                .Where(r => (!subjectId.HasValue || r.Lesson.Topic.SubjectId == subjectId.Value) &&
+                            (string.IsNullOrEmpty(lecturers) || r.Lesson.Topic.Subject.Sender == lecturers) &&
+                            (!status.HasValue || r.Status == status.Value))
+                .Select(r => new DocumentDTO
+                {
+                    FileName = r.FileName,
+                    Type = "Tài nguyên",
+                    SubjectName = r.Lesson.Topic.Subject.Name,
+                    Lecturers = r.Lesson.Topic.Subject.Sender,
+                    SentDate = r.SentDate.ToString("dd/MM/yyyy"),
+                    Status = r.Status
+                });
+
+            var documents = await documentsQuery.ToListAsync();
+            var resourceDocuments = await resourceDocumentsQuery.ToListAsync();
+
+            documents.AddRange(resourceDocuments);
+            return documents;
         }
     }
 }

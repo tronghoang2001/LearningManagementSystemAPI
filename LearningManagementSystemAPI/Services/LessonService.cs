@@ -3,6 +3,7 @@ using LearningManagementSystemAPI.Context;
 using LearningManagementSystemAPI.DTOs;
 using LearningManagementSystemAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace LearningManagementSystemAPI.Services
 {
@@ -19,6 +20,7 @@ namespace LearningManagementSystemAPI.Services
         public async Task<Lesson> CreateLessonAsync(CreateLessonDTO lessonDTO, IFormFile file)
         {
             var lesson = _mapper.Map<Lesson>(lessonDTO);
+
             if (file != null && file.Length > 0)
             {
                 var fileName = file.FileName;
@@ -55,6 +57,14 @@ namespace LearningManagementSystemAPI.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task<List<LessonDTO>> GetAllLessonsAsync()
+        {
+            var lessons = await _context.Lessons
+                .Include(l => l.Resources)
+                .ToListAsync();
+            return _mapper.Map<List<LessonDTO>>(lessons);
         }
 
         public async Task<Lesson> UpdateLessonAsync(CreateLessonDTO lessonDTO, int id, IFormFile file)

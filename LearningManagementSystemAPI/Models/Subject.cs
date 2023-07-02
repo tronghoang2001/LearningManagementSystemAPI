@@ -28,5 +28,7 @@ namespace LearningManagementSystemAPI.Models
         public ICollection<Topic> Topics { get; set; }
         [JsonIgnore]
         public ICollection<SubjectTuition> SubjectTuitions { get; set; }
+        [JsonIgnore]
+        public ICollection<Exam> Exams { get; set; }
     }
 }

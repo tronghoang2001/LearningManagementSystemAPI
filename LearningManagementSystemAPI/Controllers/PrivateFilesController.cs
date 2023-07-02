@@ -17,11 +17,11 @@ namespace LearningManagementSystemAPI.Controllers
 
         [Authorize]
         [HttpGet("list-privateFiles")]
-        public async Task<IActionResult> GetAllPrivateFiles()
+        public async Task<IActionResult> GetPrivateFilesByAccountId(int accountId)
         {
             try
             {
-                return Ok(await _privateFilesService.GetAllPrivateFilesAsync());
+                return Ok(await _privateFilesService.GetPrivateFilesByAccountIdAsync(accountId));
             }
             catch
             {
@@ -51,6 +51,21 @@ namespace LearningManagementSystemAPI.Controllers
             try
             {
                 var privateFile = await _privateFilesService.UpdatePrivateFilesAsync(privateFilesDTO, id, file);
+                return Ok(privateFile);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPut("rename-privateFiles/{id}")]
+        public async Task<IActionResult> RenamePrivateFiles(RenamePrivateFilesDTO privateFilesDTO, int id)
+        {
+            try
+            {
+                var privateFile = await _privateFilesService.RenamePrivateFilesAsync(privateFilesDTO, id);
                 return Ok(privateFile);
             }
             catch (Exception ex)

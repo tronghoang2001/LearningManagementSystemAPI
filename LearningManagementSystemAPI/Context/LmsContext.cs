@@ -20,7 +20,7 @@ namespace LearningManagementSystemAPI.Context
         public DbSet<Department> Departments { get; set; }
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Exam> Exams { get; set; }
-        public DbSet<ExamBank> ExamBanks { get; set; }
+        public DbSet<QuestionBank> ExamBanks { get; set; }
         public DbSet<ExamDetails> ExamDetails { get; set; }
         public DbSet<Exemptions> Exemptions { get; set; }
         public DbSet<Insurance> Insurances { get; set; }
@@ -111,25 +111,19 @@ namespace LearningManagementSystemAPI.Context
                .WithMany(ct => ct.SubjectTuitions)
                .HasForeignKey(c => c.SubjectId);
             modelBuilder.Entity<Exam>()
-                .HasIndex(d => d.Name)
-                .IsUnique();
-            modelBuilder.Entity<Exam>()
-                .HasIndex(d => d.FileName)
-                .IsUnique();
-            modelBuilder.Entity<Exam>()
-               .HasOne(c => c.ClassDetails)
+               .HasOne(c => c.Subject)
                .WithMany(ct => ct.Exams)
-               .HasForeignKey(c => c.ClassDetailsId);
+               .HasForeignKey(c => c.SubjectId);
             modelBuilder.Entity<ExamDetails>()
-                .HasKey(k => new { k.ExamId, k.ExamBankId });
+                .HasKey(k => new { k.ExamId, k.QuestionBankId });
             modelBuilder.Entity<ExamDetails>()
                .HasOne(c => c.Exam)
                .WithMany(ct => ct.ExamDetails)
                .HasForeignKey(c => c.ExamId);
             modelBuilder.Entity<ExamDetails>()
-               .HasOne(c => c.ExamBank)
+               .HasOne(c => c.QuestionBank)
                .WithMany(ct => ct.ExamDetails)
-               .HasForeignKey(c => c.ExamBankId);
+               .HasForeignKey(c => c.QuestionBankId);
             modelBuilder.Entity<Account>()
                .HasOne(c => c.Role)
                .WithMany(ct => ct.Accounts)

@@ -66,6 +66,7 @@ builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<ITopicService, TopicService>();
 builder.Services.AddScoped<ILessionService, LessonService>();
 builder.Services.AddScoped<IResourcesService, ResourcesService>();
+builder.Services.AddScoped<IExamService, ExamService>();
 
 //JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -4,11 +4,11 @@ using System.Text.Json.Serialization;
 
 namespace LearningManagementSystemAPI.Models
 {
-    [Table("ExamBank")]
-    public class ExamBank
+    [Table("QuestionBank")]
+    public class QuestionBank
     {
         [Key]
-        public int ExamBankId { get; set; }
+        public int QuestionId { get; set; }
         [MaxLength(200)]
         public string Question { get; set; }
         [MaxLength(100)]

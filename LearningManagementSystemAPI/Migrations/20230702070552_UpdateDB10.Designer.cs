@@ -4,6 +4,7 @@ using LearningManagementSystemAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningManagementSystemAPI.Migrations
 {
     [DbContext(typeof(LmsContext))]
-    partial class LmsContextModelSnapshot : ModelSnapshot
+    [Migration("20230702070552_UpdateDB10")]
+    partial class UpdateDB10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -379,6 +381,9 @@ namespace LearningManagementSystemAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExamId"), 1L, 1);
 
+                    b.Property<int>("ClassDetailsId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -400,17 +405,74 @@ namespace LearningManagementSystemAPI.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Time")
                         .HasColumnType("int");
 
                     b.HasKey("ExamId");
 
-                    b.HasIndex("SubjectId");
+                    b.HasIndex("ClassDetailsId");
+
+                    b.HasIndex("FileName")
+                        .IsUnique();
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Exam");
+                });
+
+            modelBuilder.Entity("LearningManagementSystemAPI.Models.ExamBank", b =>
+                {
+                    b.Property<int>("ExamBankId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExamBankId"), 1L, 1);
+
+                    b.Property<string>("A")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<string>("B")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("C")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("D")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ExamBankId");
+
+                    b.ToTable("ExamBank");
                 });
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.ExamDetails", b =>
@@ -418,12 +480,12 @@ namespace LearningManagementSystemAPI.Migrations
                     b.Property<int>("ExamId")
                         .HasColumnType("int");
 
-                    b.Property<int>("QuestionBankId")
+                    b.Property<int>("ExamBankId")
                         .HasColumnType("int");
 
-                    b.HasKey("ExamId", "QuestionBankId");
+                    b.HasKey("ExamId", "ExamBankId");
 
-                    b.HasIndex("QuestionBankId");
+                    b.HasIndex("ExamBankId");
 
                     b.ToTable("ExamDetails");
                 });
@@ -655,60 +717,6 @@ namespace LearningManagementSystemAPI.Migrations
                     b.HasKey("QuestionId");
 
                     b.ToTable("Question");
-                });
-
-            modelBuilder.Entity("LearningManagementSystemAPI.Models.QuestionBank", b =>
-                {
-                    b.Property<int>("QuestionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuestionId"), 1L, 1);
-
-                    b.Property<string>("A")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasMaxLength(1)
-                        .HasColumnType("nvarchar(1)");
-
-                    b.Property<string>("B")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("C")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("D")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Level")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<string>("Question")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("QuestionId");
-
-                    b.ToTable("QuestionBank");
                 });
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.QuestionDetails", b =>
@@ -1429,32 +1437,32 @@ namespace LearningManagementSystemAPI.Migrations
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Exam", b =>
                 {
-                    b.HasOne("LearningManagementSystemAPI.Models.Subject", "Subject")
+                    b.HasOne("LearningManagementSystemAPI.Models.ClassDetails", "ClassDetails")
                         .WithMany("Exams")
-                        .HasForeignKey("SubjectId")
+                        .HasForeignKey("ClassDetailsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Subject");
+                    b.Navigation("ClassDetails");
                 });
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.ExamDetails", b =>
                 {
+                    b.HasOne("LearningManagementSystemAPI.Models.ExamBank", "ExamBank")
+                        .WithMany("ExamDetails")
+                        .HasForeignKey("ExamBankId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LearningManagementSystemAPI.Models.Exam", "Exam")
                         .WithMany("ExamDetails")
                         .HasForeignKey("ExamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LearningManagementSystemAPI.Models.QuestionBank", "QuestionBank")
-                        .WithMany("ExamDetails")
-                        .HasForeignKey("QuestionBankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Exam");
 
-                    b.Navigation("QuestionBank");
+                    b.Navigation("ExamBank");
                 });
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Lesson", b =>
@@ -1685,6 +1693,11 @@ namespace LearningManagementSystemAPI.Migrations
                     b.Navigation("ClassDetails");
                 });
 
+            modelBuilder.Entity("LearningManagementSystemAPI.Models.ClassDetails", b =>
+                {
+                    b.Navigation("Exams");
+                });
+
             modelBuilder.Entity("LearningManagementSystemAPI.Models.CollectTuition", b =>
                 {
                     b.Navigation("Receipts");
@@ -1701,6 +1714,11 @@ namespace LearningManagementSystemAPI.Migrations
                 });
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Exam", b =>
+                {
+                    b.Navigation("ExamDetails");
+                });
+
+            modelBuilder.Entity("LearningManagementSystemAPI.Models.ExamBank", b =>
                 {
                     b.Navigation("ExamDetails");
                 });
@@ -1730,11 +1748,6 @@ namespace LearningManagementSystemAPI.Migrations
                     b.Navigation("QuestionDetails");
                 });
 
-            modelBuilder.Entity("LearningManagementSystemAPI.Models.QuestionBank", b =>
-                {
-                    b.Navigation("ExamDetails");
-                });
-
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Rank", b =>
                 {
                     b.Navigation("Salaries");
@@ -1755,8 +1768,6 @@ namespace LearningManagementSystemAPI.Migrations
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Subject", b =>
                 {
                     b.Navigation("ClassDetails");
-
-                    b.Navigation("Exams");
 
                     b.Navigation("SubjectInformation");
 

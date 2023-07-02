@@ -29,6 +29,7 @@ namespace LearningManagementSystemAPI.Mappers
             CreateMap<CreateRoleDTO, Role>();
             CreateMap<PrivateFiles, PrivateFilesDTO>();
             CreateMap<CreatePrivateFilesDTO, PrivateFiles>();
+            CreateMap<RenamePrivateFilesDTO, PrivateFiles>();
             CreateMap<UserUpdateAccountDTO, Account>();
             CreateMap<Subject, SubjectDTO>();
             CreateMap<CreateSubjectDTO, Subject>();
