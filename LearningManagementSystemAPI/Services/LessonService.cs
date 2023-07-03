@@ -17,6 +17,19 @@ namespace LearningManagementSystemAPI.Services
             _mapper = mapper;
         }
 
+        public async Task<Lesson> ApproveLessonAsync(ApproveDTO approveDTO, int id)
+        {
+            var lesson = await _context.Lessons.FindAsync(id);
+            if (lesson == null)
+            {
+                return null;
+            }
+            _mapper.Map(approveDTO, lesson);
+            _context.Lessons.Update(lesson);
+            await _context.SaveChangesAsync();
+            return lesson;
+        }
+
         public async Task<Lesson> CreateLessonAsync(CreateLessonDTO lessonDTO, IFormFile file)
         {
             var lesson = _mapper.Map<Lesson>(lessonDTO);

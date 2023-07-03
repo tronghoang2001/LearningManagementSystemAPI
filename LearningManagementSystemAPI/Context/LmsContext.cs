@@ -20,7 +20,7 @@ namespace LearningManagementSystemAPI.Context
         public DbSet<Department> Departments { get; set; }
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Exam> Exams { get; set; }
-        public DbSet<QuestionBank> ExamBanks { get; set; }
+        public DbSet<QuestionBank> QuestionBanks { get; set; }
         public DbSet<ExamDetails> ExamDetails { get; set; }
         public DbSet<Exemptions> Exemptions { get; set; }
         public DbSet<Insurance> Insurances { get; set; }

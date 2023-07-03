@@ -57,5 +57,20 @@ namespace LearningManagementSystemAPI.Controllers
             }
             return Ok("Delete Success!");
         }
+
+        [Authorize(Roles = "Admin,Lecturers")]
+        [HttpPut("approve-resources/{id}")]
+        public async Task<IActionResult> ApproveResources(ApproveDTO approveDTO, int id)
+        {
+            try
+            {
+                var resources = await _resourceService.ApproveResourcesAsync(approveDTO, id);
+                return Ok(resources);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

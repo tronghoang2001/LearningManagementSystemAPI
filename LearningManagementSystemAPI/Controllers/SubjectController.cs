@@ -104,7 +104,7 @@ namespace LearningManagementSystemAPI.Controllers
 
         [Authorize(Roles = "Admin,Lecturers")]
         [HttpPut("approve-subject/{id}")]
-        public async Task<IActionResult> ApproveSubject(ApproveSubjectDTO subjectDTO, int id)
+        public async Task<IActionResult> ApproveSubject(ApproveDTO subjectDTO, int id)
         {
             try
             {

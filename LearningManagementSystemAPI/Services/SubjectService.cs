@@ -19,7 +19,7 @@ namespace LearningManagementSystemAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<Subject> ApproveSubjectAsync(ApproveSubjectDTO subjectDTO, int id)
+        public async Task<Subject> ApproveSubjectAsync(ApproveDTO subjectDTO, int id)
         {
             var subject = await _context.Subjects.FindAsync(id);
             if (subject == null)

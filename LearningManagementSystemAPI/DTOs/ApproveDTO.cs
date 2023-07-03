@@ -1,6 +1,6 @@
 ﻿namespace LearningManagementSystemAPI.DTOs
 {
-    public class ApproveSubjectDTO
+    public class ApproveDTO
     {
         public int Status { get; set; }
     }

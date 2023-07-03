@@ -33,7 +33,9 @@ namespace LearningManagementSystemAPI.Mappers
             CreateMap<UserUpdateAccountDTO, Account>();
             CreateMap<Subject, SubjectDTO>();
             CreateMap<CreateSubjectDTO, Subject>();
-            CreateMap<ApproveSubjectDTO, Subject>();
+            CreateMap<ApproveDTO, Subject>();
+            CreateMap<ApproveDTO, Lesson>();
+            CreateMap<ApproveDTO, Resources>();
             CreateMap<Subject, SubjectDetailsDTO>()
                 .ForMember(dest => dest.Topic_list, opt => opt.MapFrom(src => src.Topics));
             CreateMap<CreateTopicDTO, Topic>();
@@ -45,6 +47,19 @@ namespace LearningManagementSystemAPI.Mappers
                 .ForMember(dest => dest.Resources_list, opt => opt.MapFrom(src => src.Resources));
             CreateMap<CreateResourcesDTO, Resources>();
             CreateMap<Resources, ResourcesDTO>();
+            CreateMap<Exam, ExamDTO>()
+                .ForMember(dest => dest.SubjectName, opt => opt.MapFrom(src => src.Subject.Name))
+                .ForMember(dest => dest.Lecturers, opt => opt.MapFrom(src => src.Subject.Sender))
+                .ForMember(dest => dest.Question_list, opt => opt.MapFrom(src => src.ExamDetails))
+                .ForMember(dest => dest.Answer_list, opt => opt.MapFrom(src => src.ExamDetails));
+            CreateMap<ExamDetails, ExamDetailsDTO>()
+                .ForMember(dest => dest.Question, opt => opt.MapFrom(src => src.QuestionBank.Question))
+                .ForMember(dest => dest.A, opt => opt.MapFrom(src => src.QuestionBank.A))
+                .ForMember(dest => dest.B, opt => opt.MapFrom(src => src.QuestionBank.B))
+                .ForMember(dest => dest.C, opt => opt.MapFrom(src => src.QuestionBank.C))
+                .ForMember(dest => dest.D, opt => opt.MapFrom(src => src.QuestionBank.D));
+            CreateMap<ExamDetails, ExamAnswersDTO>()
+                .ForMember(dest => dest.Answer, opt => opt.MapFrom(src => src.QuestionBank.Answer));
         }
     }
 }

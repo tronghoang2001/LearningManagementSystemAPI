@@ -13,6 +13,6 @@ namespace LearningManagementSystemAPI.Services
         public Task<Subject> CreateSubjectAsync(CreateSubjectDTO subjectDTO, IFormFile file);
         public Task<Subject> UpdateSubjectAsync(CreateSubjectDTO subjectDTO, int id, IFormFile file);
         public Task<bool> DeleteSubjectAsync(int id);
-        public Task<Subject> ApproveSubjectAsync(ApproveSubjectDTO subjectDTO, int id);
+        public Task<Subject> ApproveSubjectAsync(ApproveDTO subjectDTO, int id);
     }
 }

@@ -16,6 +16,19 @@ namespace LearningManagementSystemAPI.Services
             _mapper = mapper;
         }
 
+        public async Task<Resources> ApproveResourcesAsync(ApproveDTO approveDTO, int id)
+        {
+            var resources = await _context.Resources.FindAsync(id);
+            if (resources == null)
+            {
+                return null;
+            }
+            _mapper.Map(approveDTO, resources);
+            _context.Resources.Update(resources);
+            await _context.SaveChangesAsync();
+            return resources;
+        }
+
         public async Task<Resources> CreateResourcesAsync(CreateResourcesDTO resourcesDTO, IFormFile file)
         {
             var resources = _mapper.Map<Resources>(resourcesDTO);

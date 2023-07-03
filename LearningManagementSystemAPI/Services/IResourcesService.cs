@@ -9,5 +9,6 @@ namespace LearningManagementSystemAPI.Services
         public Task<Resources> CreateResourcesAsync(CreateResourcesDTO resourcesDTO, IFormFile file);
         public Task<Resources> UpdateResourcesAsync(CreateResourcesDTO resourcesDTO, int id, IFormFile file);
         public Task<bool> DeleteResourcesAsync(int id);
+        public Task<Resources> ApproveResourcesAsync(ApproveDTO approveDTO, int id);
     }
 }

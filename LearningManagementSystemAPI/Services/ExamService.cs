@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using LearningManagementSystemAPI.Context;
 using LearningManagementSystemAPI.DTOs;
+using LearningManagementSystemAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,14 +16,14 @@ namespace LearningManagementSystemAPI.Services
             _context = context;
             _mapper = mapper;
         }
-        public async Task<List<ExamDTO>> GetAllExamAsync(int? subjectId, string? lecturers, int? status)
+        public async Task<List<ExamsDTO>> GetAllExamAsync(int? subjectId, string? lecturers, int? status)
         {
             var documentsQuery = _context.Exams
                 .Include(e => e.Subject)
                 .Where(c => (!subjectId.HasValue || c.Subject.SubjectId == subjectId.Value) &&
                             (string.IsNullOrEmpty(lecturers) || c.Subject.Sender == lecturers) &&
                             (!status.HasValue || c.Status == status.Value))
-                .Select(e => new ExamDTO
+                .Select(e => new ExamsDTO
                 {
                     FileName = e.FileName,
                     SubjectName = e.Subject.Name,
@@ -34,6 +35,21 @@ namespace LearningManagementSystemAPI.Services
                 });
             var documents = await documentsQuery.ToListAsync();
             return documents;
+        }
+
+        public async Task<ExamDTO> GetExamByIdAsync(int id)
+        {
+            var exam = await _context.Exams
+                .Include(e => e.Subject)
+                .Include(e => e.ExamDetails)
+                    .ThenInclude(e => e.QuestionBank)
+                .FirstOrDefaultAsync(e => e.ExamId == id);
+            if (exam == null)
+            {
+                return null;
+            }
+            var examDTO = _mapper.Map<ExamDTO>(exam);
+            return examDTO;
         }
     }
 }

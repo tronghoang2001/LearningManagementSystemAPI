@@ -56,5 +56,20 @@ namespace LearningManagementSystemAPI.Controllers
             }
             return Ok("Delete Success!");
         }
+
+        [Authorize(Roles = "Admin,Lecturers")]
+        [HttpPut("approve-lesson/{id}")]
+        public async Task<IActionResult> ApproveLesson(ApproveDTO approveDTO, int id)
+        {
+            try
+            {
+                var lesson = await _lessionService.ApproveLessonAsync(approveDTO, id);
+                return Ok(lesson);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
