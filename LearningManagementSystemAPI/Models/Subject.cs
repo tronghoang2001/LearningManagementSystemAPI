@@ -21,7 +21,7 @@ namespace LearningManagementSystemAPI.Models
         public DateTime SentDate { get; set; }
         public int Status { get; set; }
         [JsonIgnore]
-        public ICollection<ClassDetails>? ClassDetails { get; set; }
+        public ICollection<MySubject> MySubjects { get; set; }
         [JsonIgnore]
         public ICollection<SubjectInformation> SubjectInformation { get; set; }
         [JsonIgnore]
@@ -30,5 +30,9 @@ namespace LearningManagementSystemAPI.Models
         public ICollection<SubjectTuition> SubjectTuitions { get; set; }
         [JsonIgnore]
         public ICollection<Exam> Exams { get; set; }
+        [JsonIgnore]
+        public ICollection<Notification> Notifications { get; set; }
+        [JsonIgnore]
+        public ICollection<SubjectAssignment> SubjectAssignments { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using LearningManagementSystemAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningManagementSystemAPI.Migrations
 {
     [DbContext(typeof(LmsContext))]
-    partial class LmsContextModelSnapshot : ModelSnapshot
+    [Migration("20230704055216_UpdateDB13")]
+    partial class UpdateDB13
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -511,43 +513,6 @@ namespace LearningManagementSystemAPI.Migrations
                     b.HasIndex("AccountId");
 
                     b.ToTable("MySubject");
-                });
-
-            modelBuilder.Entity("LearningManagementSystemAPI.Models.Notification", b =>
-                {
-                    b.Property<int>("NotificationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"), 1L, 1);
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SubjectId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("NotificationId");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.OnLeave", b =>
@@ -1065,21 +1030,6 @@ namespace LearningManagementSystemAPI.Migrations
                     b.ToTable("Subject");
                 });
 
-            modelBuilder.Entity("LearningManagementSystemAPI.Models.SubjectAssignment", b =>
-                {
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClassId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SubjectId", "ClassId");
-
-                    b.HasIndex("ClassId");
-
-                    b.ToTable("SubjectAssignment");
-                });
-
             modelBuilder.Entity("LearningManagementSystemAPI.Models.SubjectInformation", b =>
                 {
                     b.Property<int>("InformationId")
@@ -1510,23 +1460,6 @@ namespace LearningManagementSystemAPI.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("LearningManagementSystemAPI.Models.Notification", b =>
-                {
-                    b.HasOne("LearningManagementSystemAPI.Models.Account", "Account")
-                        .WithMany("Notifications")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LearningManagementSystemAPI.Models.Subject", "Subject")
-                        .WithMany("Notifications")
-                        .HasForeignKey("SubjectId");
-
-                    b.Navigation("Account");
-
-                    b.Navigation("Subject");
-                });
-
             modelBuilder.Entity("LearningManagementSystemAPI.Models.OnLeave", b =>
                 {
                     b.HasOne("LearningManagementSystemAPI.Models.TimeKeeping", "TimeKeeping")
@@ -1624,25 +1557,6 @@ namespace LearningManagementSystemAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Rank");
-                });
-
-            modelBuilder.Entity("LearningManagementSystemAPI.Models.SubjectAssignment", b =>
-                {
-                    b.HasOne("LearningManagementSystemAPI.Models.Class", "Class")
-                        .WithMany("SubjectAssignments")
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LearningManagementSystemAPI.Models.Subject", "Subject")
-                        .WithMany("SubjectAssignments")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Class");
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.SubjectInformation", b =>
@@ -1744,8 +1658,6 @@ namespace LearningManagementSystemAPI.Migrations
 
                     b.Navigation("MySubjects");
 
-                    b.Navigation("Notifications");
-
                     b.Navigation("PrivateFiles");
 
                     b.Navigation("QuestionDetails");
@@ -1758,11 +1670,6 @@ namespace LearningManagementSystemAPI.Migrations
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Answer", b =>
                 {
                     b.Navigation("QuestionDetails");
-                });
-
-            modelBuilder.Entity("LearningManagementSystemAPI.Models.Class", b =>
-                {
-                    b.Navigation("SubjectAssignments");
                 });
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.CollectTuition", b =>
@@ -1837,10 +1744,6 @@ namespace LearningManagementSystemAPI.Migrations
                     b.Navigation("Exams");
 
                     b.Navigation("MySubjects");
-
-                    b.Navigation("Notifications");
-
-                    b.Navigation("SubjectAssignments");
 
                     b.Navigation("SubjectInformation");
 

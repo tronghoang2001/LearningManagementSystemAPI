@@ -14,7 +14,7 @@ namespace LearningManagementSystemAPI.Context
         public DbSet<Allowance> Allowances { get; set; }
         public DbSet<Answer> Answers { get; set;}
         public DbSet<Class> Classes { get; set; }
-        public DbSet<ClassDetails> ClassDetails { get; set; }
+        public DbSet<MySubject> MySubjects { get; set; }
         public DbSet<CollectTuition> CollectTuitions { get; set; }
         public DbSet<ContractInsurance> ContractInsurances { get; set; }
         public DbSet<Department> Departments { get; set; }
@@ -46,6 +46,9 @@ namespace LearningManagementSystemAPI.Context
         public DbSet<Topic> Topics { get; set; }
         public DbSet<TimeKeeping> TimeKeepings { get; set; }
         public DbSet<OnLeave> OnLeaves { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<SubjectAssignment> SubjectAssignments { get; set; }
+        public DbSet<QuestionDetails> QuestionDetails { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -56,20 +59,18 @@ namespace LearningManagementSystemAPI.Context
             modelBuilder.Entity<Class>()
                 .HasIndex(c => c.Name)
                 .IsUnique();
-            modelBuilder.Entity<ClassDetails>()
-                .HasOne(c => c.Class)
-                .WithMany(ct => ct.ClassDetails)
-                .HasForeignKey(c => c.ClassId);
             modelBuilder.Entity<Department>()
                 .HasIndex(d => d.Name)
                 .IsUnique();
-            modelBuilder.Entity<ClassDetails>()
+            modelBuilder.Entity<Class>()
                 .HasOne(c => c.Department)
-                .WithMany(ct => ct.ClassDetails)
-                .HasForeignKey(c => c.DeparmentId);
-            modelBuilder.Entity<ClassDetails>()
+                .WithMany(ct => ct.Classes)
+                .HasForeignKey(c => c.DepartmentId);
+            modelBuilder.Entity<MySubject>()
+                .HasKey(k => new { k.SubjectId, k.AccountId });
+            modelBuilder.Entity<MySubject>()
                 .HasOne(c => c.Account)
-                .WithMany(ct => ct.ClassDetails)
+                .WithMany(ct => ct.MySubjects)
                 .HasForeignKey(c => c.AccountId);
             modelBuilder.Entity<Subject>()
                 .HasIndex(d => d.Code)
@@ -77,9 +78,9 @@ namespace LearningManagementSystemAPI.Context
             modelBuilder.Entity<Subject>()
                 .HasIndex(d => d.Name)
                 .IsUnique();
-            modelBuilder.Entity<ClassDetails>()
+            modelBuilder.Entity<MySubject>()
                 .HasOne(c => c.Subject)
-                .WithMany(ct => ct.ClassDetails)
+                .WithMany(ct => ct.MySubjects)
                 .HasForeignKey(c => c.SubjectId);
             modelBuilder.Entity<SubjectInformation>()
                 .HasOne(c => c.Subject)
@@ -276,6 +277,24 @@ namespace LearningManagementSystemAPI.Context
               .HasOne(c => c.TimeKeeping)
               .WithMany(ct => ct.OnLeaves)
               .HasForeignKey(c => c.TimeKeepingId);
+            modelBuilder.Entity<Notification>()
+              .HasOne(c => c.Account)
+              .WithMany(ct => ct.Notifications)
+              .HasForeignKey(c => c.AccountId);
+            modelBuilder.Entity<Notification>()
+              .HasOne(c => c.Subject)
+              .WithMany(ct => ct.Notifications)
+              .HasForeignKey(c => c.SubjectId);
+            modelBuilder.Entity<SubjectAssignment>()
+                .HasKey(k => new { k.SubjectId, k.ClassId });
+            modelBuilder.Entity<SubjectAssignment>()
+              .HasOne(c => c.Subject)
+              .WithMany(ct => ct.SubjectAssignments)
+              .HasForeignKey(c => c.SubjectId);
+            modelBuilder.Entity<SubjectAssignment>()
+              .HasOne(c => c.Class)
+              .WithMany(ct => ct.SubjectAssignments)
+              .HasForeignKey(c => c.ClassId);
         }
     }
 }

@@ -36,8 +36,14 @@ namespace LearningManagementSystemAPI.Mappers
             CreateMap<ApproveDTO, Subject>();
             CreateMap<ApproveDTO, Lesson>();
             CreateMap<ApproveDTO, Resources>();
+            CreateMap<ApproveDTO, Exam>();
             CreateMap<Subject, SubjectDetailsDTO>()
-                .ForMember(dest => dest.Topic_list, opt => opt.MapFrom(src => src.Topics));
+                .ForMember(dest => dest.Topic_list, opt => opt.MapFrom(src => src.Topics))
+                .ForMember(dest => dest.subjectOverview, opt => opt.MapFrom(src => src.SubjectAssignments));
+            CreateMap<SubjectAssignment, SubjectOverviewDTO>()
+                .ForMember(dest => dest.DepartmentName, opt => opt.MapFrom(src => src.Class.Department.Name))
+                .ForMember(dest => dest.ClassCode, opt => opt.MapFrom(src => src.Class.Code))
+                .ForMember(dest => dest.ClassName, opt => opt.MapFrom(src => src.Class.Name));
             CreateMap<CreateTopicDTO, Topic>();
             CreateMap<UpdateTopicDTO, Topic>();
             CreateMap<Topic, TopicDTO>()
@@ -60,6 +66,24 @@ namespace LearningManagementSystemAPI.Mappers
                 .ForMember(dest => dest.D, opt => opt.MapFrom(src => src.QuestionBank.D));
             CreateMap<ExamDetails, ExamAnswersDTO>()
                 .ForMember(dest => dest.Answer, opt => opt.MapFrom(src => src.QuestionBank.Answer));
+            CreateMap<CreateSupportDTO, Support>();
+            CreateMap<CreateNotificationDTO, Notification>()
+                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.IsRead, opt => opt.MapFrom(src => false));
+            CreateMap<Notification, NotificationDTO>()
+                .ForMember(dest => dest.AccountName, opt => opt.MapFrom(src => src.Account.Name));
+            CreateMap<CreateSubjectAssignmentDTO, SubjectAssignment>();
+            CreateMap<CreateQuestionDTO, Question>()
+                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.IsAnswer, opt => opt.MapFrom(src => false));
+            CreateMap<CreateAnswerDTO, Answer>()
+                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => DateTime.Now));
+            CreateMap<Question, QuestionDTO>()
+                .ForMember(dest => dest.Answer_list, opt => opt.MapFrom(src => src.QuestionDetails));
+            CreateMap<QuestionDetails, AnswerDTO>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Account.Name))
+                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.Answer.CreateDate))
+                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Answer.Content));
         }
     }
 }

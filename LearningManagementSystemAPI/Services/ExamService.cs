@@ -3,7 +3,6 @@ using LearningManagementSystemAPI.Context;
 using LearningManagementSystemAPI.DTOs;
 using LearningManagementSystemAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace LearningManagementSystemAPI.Services
 {
@@ -16,13 +15,29 @@ namespace LearningManagementSystemAPI.Services
             _context = context;
             _mapper = mapper;
         }
-        public async Task<List<ExamsDTO>> GetAllExamAsync(int? subjectId, string? lecturers, int? status)
+
+        public async Task<Exam> ApproveExamAsync(ApproveDTO approveDTO, int id)
         {
-            var documentsQuery = _context.Exams
+            var exam = await _context.Exams.FindAsync(id);
+            if (exam == null)
+            {
+                return null;
+            }
+            _mapper.Map(approveDTO, exam);
+            _context.Exams.Update(exam);
+            await _context.SaveChangesAsync();
+            return exam;
+        }
+
+        public async Task<List<ExamsDTO>> GetAllExamAsync(int? subjectId, int? lecturers, int? status)
+        {
+            var examsQuery = _context.Exams
                 .Include(e => e.Subject)
-                .Where(c => (!subjectId.HasValue || c.Subject.SubjectId == subjectId.Value) &&
-                            (string.IsNullOrEmpty(lecturers) || c.Subject.Sender == lecturers) &&
-                            (!status.HasValue || c.Status == status.Value))
+                .ThenInclude(e => e.MySubjects)
+                .ThenInclude(e => e.Account)
+                 .Where(c => (!subjectId.HasValue || c.Subject.SubjectId == subjectId.Value) &&
+                    (!lecturers.HasValue || c.Subject.MySubjects.Any(ms => ms.AccountId == lecturers.Value)) &&
+                    (!status.HasValue || c.Status == status.Value))
                 .Select(e => new ExamsDTO
                 {
                     FileName = e.FileName,
@@ -33,8 +48,8 @@ namespace LearningManagementSystemAPI.Services
                     CreateDate = e.CreateDate.ToString("dd/MM/yyyy, hh:mm tt"),
                     Status = e.Status
                 });
-            var documents = await documentsQuery.ToListAsync();
-            return documents;
+            var exams = await examsQuery.ToListAsync();
+            return exams;
         }
 
         public async Task<ExamDTO> GetExamByIdAsync(int id)

@@ -10,5 +10,6 @@ namespace LearningManagementSystemAPI.DTOs
         public string Sender { get; set; }
         public string Description { get; set; }
         public List<TopicDTO> Topic_list { get; set; }
+        public List<SubjectOverviewDTO> subjectOverview { get; set; }
     }
 }

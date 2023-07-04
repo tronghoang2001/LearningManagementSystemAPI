@@ -54,7 +54,7 @@ namespace LearningManagementSystemAPI.Controllers
 
         [Authorize(Roles = "Admin,Lecturers")]
         [HttpGet("get-all-documents")]
-        public async Task<ActionResult<List<DocumentDTO>>> GetAllDocuments(int? subjectId, string? lecturers, int? status)
+        public async Task<ActionResult<List<DocumentDTO>>> GetAllDocuments(int? subjectId, int? lecturers, int? status)
         {
             var documents = await _subjectService.GetAllDocumentsAsync(subjectId, lecturers, status);
             return Ok(documents);
@@ -115,6 +115,14 @@ namespace LearningManagementSystemAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost("create-subjectAssignment")]
+        public async Task<IActionResult> CreateSubjectAssignment(CreateSubjectAssignmentDTO subjectAssignmentDTO)
+        {
+            var assignment = await _subjectService.CreateSubjectAssignmentAsync(subjectAssignmentDTO);
+
+            return Ok(assignment);
         }
     }
 }

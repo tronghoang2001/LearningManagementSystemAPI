@@ -34,7 +34,7 @@ namespace LearningManagementSystemAPI.Models
         public int RoleId { get; set; }
         public Role Role { get; set; }
         [JsonIgnore]
-        public ICollection<ClassDetails>? ClassDetails { get; set; }
+        public ICollection<MySubject>? MySubjects { get; set; }
         [JsonIgnore]
         public ICollection<PrivateFiles> PrivateFiles { get; set; }
         [JsonIgnore]
@@ -45,5 +45,7 @@ namespace LearningManagementSystemAPI.Models
         public ICollection<CollectTuition> CollectTuitions { get; set; }
         [JsonIgnore]
         public ICollection<TeacherProfile> TeacherProfiles { get; set; }
+        [JsonIgnore]
+        public ICollection<Notification> Notifications { get; set; }
     }
 }

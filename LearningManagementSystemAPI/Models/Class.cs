@@ -13,7 +13,9 @@ namespace LearningManagementSystemAPI.Models
         public string Code { get; set; }
         [MaxLength(50)]
         public string Name { get; set; }
+        public int DepartmentId { get; set; }
+        public Department Department { get; set; }
         [JsonIgnore]
-        public ICollection<ClassDetails>? ClassDetails { get; set; }
+        public ICollection<SubjectAssignment> SubjectAssignments { get; set; }
     }
 }

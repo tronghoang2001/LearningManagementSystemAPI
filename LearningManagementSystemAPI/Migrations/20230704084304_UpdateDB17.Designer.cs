@@ -4,6 +4,7 @@ using LearningManagementSystemAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningManagementSystemAPI.Migrations
 {
     [DbContext(typeof(LmsContext))]
-    partial class LmsContextModelSnapshot : ModelSnapshot
+    [Migration("20230704084304_UpdateDB17")]
+    partial class UpdateDB17
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1077,7 +1079,7 @@ namespace LearningManagementSystemAPI.Migrations
 
                     b.HasIndex("ClassId");
 
-                    b.ToTable("SubjectAssignment");
+                    b.ToTable("SubjectAssignments");
                 });
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.SubjectInformation", b =>

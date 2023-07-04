@@ -60,7 +60,7 @@ namespace LearningManagementSystemAPI.Services
         public async Task<bool> DeleteSubjectAsync(int id)
         {
             var subject = await _context.Subjects
-                .Include(s => s.ClassDetails)
+                .Include(s => s.MySubjects)
                 .FirstOrDefaultAsync(p => p.SubjectId == id);
 
             if (subject != null)
@@ -71,7 +71,7 @@ namespace LearningManagementSystemAPI.Services
                     File.Delete(filePath);
                 }
 
-                _context.ClassDetails.RemoveRange(subject.ClassDetails);
+                _context.MySubjects.RemoveRange(subject.MySubjects);
                 _context.Subjects.Remove(subject);
                 await _context.SaveChangesAsync();
                 return true;
@@ -88,6 +88,9 @@ namespace LearningManagementSystemAPI.Services
         public async Task<SubjectDetailsDTO> GetSubjectByIdAsync(int id)
         {
             var subject = await _context.Subjects
+                .Include(s => s.SubjectAssignments)
+                    .ThenInclude(s => s.Class)
+                    .ThenInclude(s => s.Department)
                 .Include(s => s.Topics)
                     .ThenInclude(t => t.Lessons)
                         .ThenInclude(l => l.Resources)
@@ -172,13 +175,16 @@ namespace LearningManagementSystemAPI.Services
             return subject;
         }
 
-        public async Task<List<DocumentDTO>> GetAllDocumentsAsync(int? subjectId, string? lecturers, int? status)
+        public async Task<List<DocumentDTO>> GetAllDocumentsAsync(int? subjectId, int? lecturers, int? status)
         {
             var documentsQuery = _context.Lessons
-                .Include(l => l.Topic.Subject)
+                .Include(l => l.Topic)
+                    .ThenInclude(l => l.Subject)
+                    .ThenInclude(l => l.MySubjects)
+                    .ThenInclude(l => l.Account)
                 .Include(l => l.Resources)
                 .Where(l => (!subjectId.HasValue || l.Topic.SubjectId == subjectId.Value) &&
-                            (string.IsNullOrEmpty(lecturers) || l.Topic.Subject.Sender == lecturers) &&
+                            (!lecturers.HasValue || l.Topic.Subject.MySubjects.Any(ms => ms.AccountId == lecturers.Value)) &&
                             (!status.HasValue || l.Status == status.Value))
                 .Select(l => new DocumentDTO
                 {
@@ -193,7 +199,7 @@ namespace LearningManagementSystemAPI.Services
             var resourceDocumentsQuery = _context.Resources
                 .Include(r => r.Lesson.Topic.Subject)
                 .Where(r => (!subjectId.HasValue || r.Lesson.Topic.SubjectId == subjectId.Value) &&
-                            (string.IsNullOrEmpty(lecturers) || r.Lesson.Topic.Subject.Sender == lecturers) &&
+                            (!lecturers.HasValue || r.Lesson.Topic.Subject.MySubjects.Any(ms => ms.AccountId == lecturers.Value)) &&
                             (!status.HasValue || r.Status == status.Value))
                 .Select(r => new DocumentDTO
                 {
@@ -210,6 +216,14 @@ namespace LearningManagementSystemAPI.Services
 
             documents.AddRange(resourceDocuments);
             return documents;
+        }
+
+        public async Task<SubjectAssignment> CreateSubjectAssignmentAsync(CreateSubjectAssignmentDTO subjectAssignmentDTO)
+        {
+            var assignment = _mapper.Map<SubjectAssignment>(subjectAssignmentDTO);
+            await _context.SubjectAssignments.AddAsync(assignment);
+            await _context.SaveChangesAsync();
+            return assignment;
         }
     }
 }
