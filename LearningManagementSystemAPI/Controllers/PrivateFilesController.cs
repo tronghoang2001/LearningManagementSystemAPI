@@ -85,5 +85,21 @@ namespace LearningManagementSystemAPI.Controllers
             }
             return Ok("Delete Success!");
         }
+
+
+        [Authorize]
+        [HttpGet("download-privateFiles/{id}")]
+        public async Task<IActionResult> DownloadPrivateFilesFile(int id)
+        {
+            try
+            {
+                var fileStreamResult = await _privateFilesService.DownloadPrivateFilesAsync(id);
+                return fileStreamResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

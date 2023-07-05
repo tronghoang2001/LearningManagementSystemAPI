@@ -57,7 +57,7 @@ namespace LearningManagementSystemAPI.Controllers
             return Ok("Delete Success!");
         }
 
-        [Authorize(Roles = "Admin,Lecturers")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("approve-lesson/{id}")]
         public async Task<IActionResult> ApproveLesson(ApproveDTO approveDTO, int id)
         {
@@ -65,6 +65,21 @@ namespace LearningManagementSystemAPI.Controllers
             {
                 var lesson = await _lessionService.ApproveLessonAsync(approveDTO, id);
                 return Ok(lesson);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("download-lessonFile/{id}")]
+        public async Task<IActionResult> DownloadLessonFile(int id)
+        {
+            try
+            {
+                var fileStreamResult = await _lessionService.DownloadLessonFileAsync(id);
+                return fileStreamResult;
             }
             catch (Exception ex)
             {

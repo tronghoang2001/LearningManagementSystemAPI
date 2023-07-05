@@ -4,6 +4,7 @@ using LearningManagementSystemAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningManagementSystemAPI.Migrations
 {
     [DbContext(typeof(LmsContext))]
-    partial class LmsContextModelSnapshot : ModelSnapshot
+    [Migration("20230705151044_UpdateDB26")]
+    partial class UpdateDB26
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -489,6 +491,34 @@ namespace LearningManagementSystemAPI.Migrations
                     b.ToTable("QuestionBank");
                 });
 
+            modelBuilder.Entity("LearningManagementSystemAPI.Models.QuestionDetails", b =>
+                {
+                    b.Property<int>("QuestionDetailsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuestionDetailsId"), 1L, 1);
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AnswerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("QuestionDetailsId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("AnswerId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("QuestionDetails");
+                });
+
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Resources", b =>
                 {
                     b.Property<int>("ResourcesId")
@@ -830,6 +860,31 @@ namespace LearningManagementSystemAPI.Migrations
                     b.Navigation("Subject");
                 });
 
+            modelBuilder.Entity("LearningManagementSystemAPI.Models.QuestionDetails", b =>
+                {
+                    b.HasOne("LearningManagementSystemAPI.Models.Account", "Account")
+                        .WithMany("QuestionDetails")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LearningManagementSystemAPI.Models.Answer", "Answer")
+                        .WithMany()
+                        .HasForeignKey("AnswerId");
+
+                    b.HasOne("LearningManagementSystemAPI.Models.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Answer");
+
+                    b.Navigation("Question");
+                });
+
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Resources", b =>
                 {
                     b.HasOne("LearningManagementSystemAPI.Models.Lesson", "Lesson")
@@ -891,6 +946,8 @@ namespace LearningManagementSystemAPI.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("PrivateFiles");
+
+                    b.Navigation("QuestionDetails");
 
                     b.Navigation("Questions");
 

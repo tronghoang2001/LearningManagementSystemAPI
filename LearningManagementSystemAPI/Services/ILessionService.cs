@@ -1,5 +1,6 @@
 ﻿using LearningManagementSystemAPI.DTOs;
 using LearningManagementSystemAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LearningManagementSystemAPI.Services
 {
@@ -10,5 +11,6 @@ namespace LearningManagementSystemAPI.Services
         public Task<Lesson> UpdateLessonAsync(CreateLessonDTO lessonDTO, int id, IFormFile file);
         public Task<bool> DeleteLessonAsync(int id);
         public Task<Lesson> ApproveLessonAsync(ApproveDTO approveDTO, int id);
+        public Task<FileStreamResult> DownloadLessonFileAsync(int id);
     }
 }

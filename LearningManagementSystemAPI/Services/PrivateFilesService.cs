@@ -2,6 +2,7 @@
 using LearningManagementSystemAPI.Context;
 using LearningManagementSystemAPI.DTOs;
 using LearningManagementSystemAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearningManagementSystemAPI.Services
@@ -55,6 +56,23 @@ namespace LearningManagementSystemAPI.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task<FileStreamResult> DownloadPrivateFilesAsync(int id)
+        {
+            var privateFiles = await _context.PrivateFiles.FindAsync(id);
+            if (privateFiles == null)
+            {
+                throw new Exception("File not found");
+            }
+
+            var filePath = Path.Combine("Uploads\\PrivateFiles", privateFiles.FileName);
+            var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+            return new FileStreamResult(stream, "application/octet-stream")
+            {
+                FileDownloadName = privateFiles.FileName
+            };
         }
 
         public async Task<List<PrivateFilesDTO>> GetPrivateFilesByAccountIdAsync(int accountId)

@@ -14,6 +14,7 @@ namespace LearningManagementSystemAPI.Controllers
         {
             _supportService = supportService;
         }
+
         [Authorize]
         [HttpPost("create-support")]
         public async Task<IActionResult> CreateSupport(CreateSupportDTO supportDTO)

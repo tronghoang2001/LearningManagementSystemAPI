@@ -20,26 +20,16 @@ namespace LearningManagementSystemAPI.Services
             var question = _mapper.Map<Question>(questionDTO);
             await _context.Questions.AddAsync(question);
             await _context.SaveChangesAsync();
-
-            var questionDetails = new QuestionDetails
-            {
-                QuestionId = question.QuestionId,
-                AccountId = questionDTO.AccountId,
-
-            };
-            _context.QuestionDetails.Add(questionDetails);
-            await _context.SaveChangesAsync();
-
             return question;
         }
 
-        public async Task<List<QuestionDTO>> GetAllQuestionAsync()
+        public async Task<List<QuestionDTO>> GetAllQuestionAsync(int subjectId)
         {
             var questions = await _context.Questions
-                .Include(c => c.QuestionDetails)
+                .Include(c => c.Account)
+                .Include(c => c.Answers)
                     .ThenInclude(c => c.Account)
-                .Include(c => c.QuestionDetails)
-                    .ThenInclude(c => c.Answer)
+                .Where(c => c.SubjectId ==  subjectId)
                 .ToListAsync();
 
             return _mapper.Map<List<QuestionDTO>>(questions);

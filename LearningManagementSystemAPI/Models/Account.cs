@@ -40,12 +40,10 @@ namespace LearningManagementSystemAPI.Models
         [JsonIgnore]
         public ICollection<Support> Supports { get; set; }
         [JsonIgnore]
-        public ICollection<QuestionDetails> QuestionDetails { get; set; }
-        [JsonIgnore]
-        public ICollection<CollectTuition> CollectTuitions { get; set; }
-        [JsonIgnore]
-        public ICollection<TeacherProfile> TeacherProfiles { get; set; }
-        [JsonIgnore]
         public ICollection<Notification> Notifications { get; set; }
+        [JsonIgnore]
+        public ICollection<Question> Questions { get; set; }
+        [JsonIgnore]
+        public ICollection<Answer> Answers { get; set; }
     }
 }

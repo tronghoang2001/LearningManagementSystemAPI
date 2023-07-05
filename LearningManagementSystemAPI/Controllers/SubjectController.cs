@@ -15,7 +15,7 @@ namespace LearningManagementSystemAPI.Controllers
             _subjectService = subjectService;
         }
 
-        [Authorize(Roles = "Admin,Lecturers")]
+        [Authorize]
         [HttpGet("list-subject")]
         public async Task<IActionResult> GetAllSubject()
         {
@@ -29,7 +29,7 @@ namespace LearningManagementSystemAPI.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin,Lecturers")]
+        [Authorize]
         [HttpGet("subject-by-id/{id}")]
         public async Task<IActionResult> GetSubjectById(int id)
         {
@@ -37,7 +37,15 @@ namespace LearningManagementSystemAPI.Controllers
             return subject == null ? NotFound() : Ok(subject);
         }
 
-        [Authorize(Roles = "Admin,Lecturers")]
+        [Authorize]
+        [HttpGet("subject-by-accountId/{id}")]
+        public async Task<IActionResult> GetSubjectByAccountId(int id)
+        {
+            var subject = await _subjectService.GetSubjectByAccountIdAsync(id);
+            return subject == null ? NotFound() : Ok(subject);
+        }
+
+        [Authorize]
         [HttpGet("{subjectId}/get-documents-by-id")]
         public async Task<IActionResult> GetDocumentsBySubjectId(int subjectId)
         {
@@ -52,7 +60,7 @@ namespace LearningManagementSystemAPI.Controllers
             return Ok(documents);
         }
 
-        [Authorize(Roles = "Admin,Lecturers")]
+        [Authorize]
         [HttpGet("get-all-documents")]
         public async Task<ActionResult<List<DocumentDTO>>> GetAllDocuments(int? subjectId, int? lecturers, int? status)
         {
@@ -102,7 +110,7 @@ namespace LearningManagementSystemAPI.Controllers
             return Ok("Delete Success!");
         }
 
-        [Authorize(Roles = "Admin,Lecturers")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("approve-subject/{id}")]
         public async Task<IActionResult> ApproveSubject(ApproveDTO subjectDTO, int id)
         {
@@ -117,12 +125,28 @@ namespace LearningManagementSystemAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Lecturers")]
         [HttpPost("create-subjectAssignment")]
         public async Task<IActionResult> CreateSubjectAssignment(CreateSubjectAssignmentDTO subjectAssignmentDTO)
         {
             var assignment = await _subjectService.CreateSubjectAssignmentAsync(subjectAssignmentDTO);
 
             return Ok(assignment);
+        }
+
+        [Authorize]
+        [HttpGet("download-subjectFile/{subjectId}")]
+        public async Task<IActionResult> DownloadSubjectFile(int subjectId)
+        {
+            try
+            {
+                var fileStreamResult = await _subjectService.DownloadSubjectFileAsync(subjectId);
+                return fileStreamResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

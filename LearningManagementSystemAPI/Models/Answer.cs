@@ -11,7 +11,9 @@ namespace LearningManagementSystemAPI.Models
         public int AnswerId { get; set; }
         public string Content { get; set; }
         public DateTime CreateDate { get; set; }
-        [JsonIgnore]
-        public ICollection<QuestionDetails> QuestionDetails { get; set; }
+        public int? QuestionId { get; set; }
+        public int? AccountId { get; set; }
+        public Question? Question { get; set; }
+        public Account? Account { get; set; }
     }
 }

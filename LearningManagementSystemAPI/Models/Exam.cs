@@ -12,7 +12,7 @@ namespace LearningManagementSystemAPI.Models
         [MaxLength(50)]
         public string Name { get; set; }
         [MaxLength(100)]
-        public string FileName { get; set; }
+        public string? FileName { get; set; }
         [MaxLength(50)]
         public string Method { get; set; }
         public int Time { get; set; }

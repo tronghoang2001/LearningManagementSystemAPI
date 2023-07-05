@@ -2,6 +2,7 @@
 using LearningManagementSystemAPI.Context;
 using LearningManagementSystemAPI.DTOs;
 using LearningManagementSystemAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -70,6 +71,23 @@ namespace LearningManagementSystemAPI.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task<FileStreamResult> DownloadLessonFileAsync(int id)
+        {
+            var lessonFile = await _context.Lessons.FindAsync(id);
+            if (lessonFile == null)
+            {
+                throw new Exception("File not found");
+            }
+
+            var filePath = Path.Combine("Uploads\\Lesson", lessonFile.FileName);
+            var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+            return new FileStreamResult(stream, "application/octet-stream")
+            {
+                FileDownloadName = lessonFile.FileName
+            };
         }
 
         public async Task<List<LessonDTO>> GetAllLessonsAsync()

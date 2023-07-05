@@ -1,5 +1,6 @@
 ﻿using LearningManagementSystemAPI.DTOs;
 using LearningManagementSystemAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningManagementSystemAPI.Controllers
@@ -14,6 +15,7 @@ namespace LearningManagementSystemAPI.Controllers
             _questionService = questionService;
         }
 
+        [Authorize]
         [HttpPost("create-question")]
         public async Task<IActionResult> CreateQuestion(CreateQuestionDTO questionDTO)
         {
@@ -22,12 +24,13 @@ namespace LearningManagementSystemAPI.Controllers
             return Ok(question);
         }
 
-        [HttpGet("list-question")]
-        public async Task<IActionResult> GetAllQuestion()
+        [Authorize]
+        [HttpGet("list-question/{subjectId}")]
+        public async Task<IActionResult> GetAllQuestion(int subjectId)
         {
             try
             {
-                return Ok(await _questionService.GetAllQuestionAsync());
+                return Ok(await _questionService.GetAllQuestionAsync(subjectId));
             }
             catch
             {

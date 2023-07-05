@@ -1,5 +1,6 @@
 ﻿using LearningManagementSystemAPI.DTOs;
 using LearningManagementSystemAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningManagementSystemAPI.Controllers
@@ -14,6 +15,7 @@ namespace LearningManagementSystemAPI.Controllers
             _answerService = answerService;
         }
 
+        [Authorize]
         [HttpPost("create-answer")]
         public async Task<IActionResult> CreateAnswer(CreateAnswerDTO answerDTO)
         {

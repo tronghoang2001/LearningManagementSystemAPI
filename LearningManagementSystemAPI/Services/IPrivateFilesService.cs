@@ -1,5 +1,6 @@
 ﻿using LearningManagementSystemAPI.DTOs;
 using LearningManagementSystemAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LearningManagementSystemAPI.Services
 {
@@ -10,5 +11,6 @@ namespace LearningManagementSystemAPI.Services
         public Task<PrivateFiles> UpdatePrivateFilesAsync(CreatePrivateFilesDTO privateFilesDTO, int id, IFormFile file);
         public Task<PrivateFiles> RenamePrivateFilesAsync(RenamePrivateFilesDTO privateFilesDTO, int id);
         public Task<bool> DeletePrivateFilesAsync(int id);
+        public Task<FileStreamResult> DownloadPrivateFilesAsync(int id);
     }
 }

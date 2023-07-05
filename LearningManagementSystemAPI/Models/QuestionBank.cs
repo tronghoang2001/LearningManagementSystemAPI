@@ -9,20 +9,22 @@ namespace LearningManagementSystemAPI.Models
     {
         [Key]
         public int QuestionId { get; set; }
+        [MaxLength(10)]
+        public string QuestionCode { get; set; }
         [MaxLength(200)]
         public string Question { get; set; }
         [MaxLength(100)]
-        public string A { get; set; }
+        public string? A { get; set; }
         [MaxLength(100)]
-        public string B { get; set; }
+        public string? B { get; set; }
         [MaxLength(100)]
-        public string C { get; set; }
+        public string? C { get; set; }
         [MaxLength(100)]
-        public string D { get; set; }
+        public string? D { get; set; }
         [MaxLength(1)]
-        public string Answer { get; set; }
+        public string? Answer { get; set; }
         [MaxLength(15)]
-        public string Level { get; set; }
+        public string? Level { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         [JsonIgnore]

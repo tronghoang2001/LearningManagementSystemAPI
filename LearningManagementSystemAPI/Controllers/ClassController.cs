@@ -16,7 +16,7 @@ namespace LearningManagementSystemAPI.Controllers
             _classService = classService;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Lecturers")]
         [HttpGet("list-class")]
         public async Task<IActionResult> GetAllClass()
         {
@@ -30,7 +30,7 @@ namespace LearningManagementSystemAPI.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Lecturers")]
         [HttpPost("create-class")]
         public async Task<IActionResult> CreateClass(CreateClassDTO classDTO)
         {
@@ -39,7 +39,7 @@ namespace LearningManagementSystemAPI.Controllers
             return Ok(classroom);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Lecturers")]
         [HttpPut("update-class/{id}")]
         public async Task<ActionResult<Class>> UpdateClass(CreateClassDTO classDTO, int id)
         {
@@ -54,7 +54,7 @@ namespace LearningManagementSystemAPI.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Lecturers")]
         [HttpDelete("delete-class/{id}")]
         public async Task<ActionResult> DeleteClass(int id)
         {

@@ -2,6 +2,7 @@
 using LearningManagementSystemAPI.Context;
 using LearningManagementSystemAPI.DTOs;
 using LearningManagementSystemAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Reflection.Metadata;
@@ -224,6 +225,34 @@ namespace LearningManagementSystemAPI.Services
             await _context.SubjectAssignments.AddAsync(assignment);
             await _context.SaveChangesAsync();
             return assignment;
+        }
+
+        public async Task<List<SubjectDTO>> GetSubjectByAccountIdAsync(int accountId)
+        {
+            var subjects = await _context.Subjects
+                .Include(s => s.MySubjects)
+                    .ThenInclude(ms => ms.Account)
+                .Where(s => s.MySubjects.Any(ms => ms.Account.AccountId == accountId))
+                .ToListAsync();
+            var mySubjectDto = _mapper.Map<List<SubjectDTO>>(subjects);
+            return mySubjectDto;
+        }
+
+        public async Task<FileStreamResult> DownloadSubjectFileAsync(int subjectId)
+        {
+            var subjectFile = await _context.Subjects.FindAsync(subjectId);
+            if (subjectFile == null)
+            {
+                throw new Exception("File not found");
+            }
+
+            var filePath = Path.Combine("Uploads\\Subject", subjectFile.FileName);
+            var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+            return new FileStreamResult(stream, "application/octet-stream")
+            {
+                FileDownloadName = subjectFile.FileName
+            };
         }
     }
 }

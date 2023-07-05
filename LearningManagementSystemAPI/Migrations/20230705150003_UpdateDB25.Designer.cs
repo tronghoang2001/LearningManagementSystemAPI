@@ -4,6 +4,7 @@ using LearningManagementSystemAPI.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearningManagementSystemAPI.Migrations
 {
     [DbContext(typeof(LmsContext))]
-    partial class LmsContextModelSnapshot : ModelSnapshot
+    [Migration("20230705150003_UpdateDB25")]
+    partial class UpdateDB25
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,9 +103,6 @@ namespace LearningManagementSystemAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AnswerId"), 1L, 1);
 
-                    b.Property<int?>("AccountId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -111,14 +110,7 @@ namespace LearningManagementSystemAPI.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("QuestionId")
-                        .HasColumnType("int");
-
                     b.HasKey("AnswerId");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("QuestionId");
 
                     b.ToTable("Answer");
                 });
@@ -489,6 +481,34 @@ namespace LearningManagementSystemAPI.Migrations
                     b.ToTable("QuestionBank");
                 });
 
+            modelBuilder.Entity("LearningManagementSystemAPI.Models.QuestionDetails", b =>
+                {
+                    b.Property<int>("QuestionDetailsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuestionDetailsId"), 1L, 1);
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AnswerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("QuestionDetailsId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("AnswerId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("QuestionDetails");
+                });
+
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Resources", b =>
                 {
                     b.Property<int>("ResourcesId")
@@ -682,21 +702,6 @@ namespace LearningManagementSystemAPI.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("LearningManagementSystemAPI.Models.Answer", b =>
-                {
-                    b.HasOne("LearningManagementSystemAPI.Models.Account", "Account")
-                        .WithMany("Answers")
-                        .HasForeignKey("AccountId");
-
-                    b.HasOne("LearningManagementSystemAPI.Models.Question", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionId");
-
-                    b.Navigation("Account");
-
-                    b.Navigation("Question");
-                });
-
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Class", b =>
                 {
                     b.HasOne("LearningManagementSystemAPI.Models.Department", "Department")
@@ -830,6 +835,31 @@ namespace LearningManagementSystemAPI.Migrations
                     b.Navigation("Subject");
                 });
 
+            modelBuilder.Entity("LearningManagementSystemAPI.Models.QuestionDetails", b =>
+                {
+                    b.HasOne("LearningManagementSystemAPI.Models.Account", "Account")
+                        .WithMany("QuestionDetails")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LearningManagementSystemAPI.Models.Answer", "Answer")
+                        .WithMany("QuestionDetails")
+                        .HasForeignKey("AnswerId");
+
+                    b.HasOne("LearningManagementSystemAPI.Models.Question", "Question")
+                        .WithMany("QuestionDetails")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Answer");
+
+                    b.Navigation("Question");
+                });
+
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Resources", b =>
                 {
                     b.HasOne("LearningManagementSystemAPI.Models.Lesson", "Lesson")
@@ -884,17 +914,22 @@ namespace LearningManagementSystemAPI.Migrations
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Account", b =>
                 {
-                    b.Navigation("Answers");
-
                     b.Navigation("MySubjects");
 
                     b.Navigation("Notifications");
 
                     b.Navigation("PrivateFiles");
 
+                    b.Navigation("QuestionDetails");
+
                     b.Navigation("Questions");
 
                     b.Navigation("Supports");
+                });
+
+            modelBuilder.Entity("LearningManagementSystemAPI.Models.Answer", b =>
+                {
+                    b.Navigation("QuestionDetails");
                 });
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Class", b =>
@@ -924,7 +959,7 @@ namespace LearningManagementSystemAPI.Migrations
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.Question", b =>
                 {
-                    b.Navigation("Answers");
+                    b.Navigation("QuestionDetails");
                 });
 
             modelBuilder.Entity("LearningManagementSystemAPI.Models.QuestionBank", b =>

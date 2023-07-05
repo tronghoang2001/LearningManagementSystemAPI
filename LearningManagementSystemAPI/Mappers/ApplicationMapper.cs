@@ -79,11 +79,15 @@ namespace LearningManagementSystemAPI.Mappers
             CreateMap<CreateAnswerDTO, Answer>()
                 .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => DateTime.Now));
             CreateMap<Question, QuestionDTO>()
-                .ForMember(dest => dest.Answer_list, opt => opt.MapFrom(src => src.QuestionDetails));
-            CreateMap<QuestionDetails, AnswerDTO>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Account.Name))
-                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.Answer.CreateDate))
-                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Answer.Content));
+                .ForMember(dest => dest.Answer_list, opt => opt.MapFrom(src => src.Answers));
+            CreateMap<Answer, AnswerDTO>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Account.Name));
+            CreateMap<CreateQuestionBankDTO, QuestionBank>();
+            CreateMap<CreateEssayQuestionDTO, QuestionBank>();
+            CreateMap<UploadExamFileDTO, Exam>();
+            CreateMap<QuestionBank, QuestionBankDTO>();
+            CreateMap<QuestionBank, QuestionBankDetailsDTO>();
         }
     }
 }

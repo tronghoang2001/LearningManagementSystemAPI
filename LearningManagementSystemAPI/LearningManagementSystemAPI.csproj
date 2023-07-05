@@ -26,6 +26,7 @@
     <Folder Include="Migrations\" />
     <Folder Include="Uploads\Avatar\" />
     <Folder Include="Uploads\Lesson\" />
+    <Folder Include="Uploads\Exam\" />
     <Folder Include="Uploads\Resources\" />
     <Folder Include="Uploads\Subject\" />
     <Folder Include="Uploads\PrivateFiles\" />

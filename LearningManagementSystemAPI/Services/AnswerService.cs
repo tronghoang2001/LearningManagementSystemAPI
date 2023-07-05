@@ -19,16 +19,6 @@ namespace LearningManagementSystemAPI.Services
             var answer = _mapper.Map<Answer>(answerDTO);
             await _context.Answers.AddAsync(answer);
             await _context.SaveChangesAsync();
-
-            var questionDetails = new QuestionDetails
-            {
-                AnswerId = answer.AnswerId,
-                QuestionId = answerDTO.QuestionId,
-                AccountId = answerDTO.AccountId,
-            };
-            _context.QuestionDetails.Add(questionDetails);
-            await _context.SaveChangesAsync();
-
             return answer;
         }
     }
