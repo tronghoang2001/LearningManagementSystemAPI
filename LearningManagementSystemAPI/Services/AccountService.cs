@@ -74,15 +74,15 @@ namespace LearningManagementSystemAPI.Services
 
             return account;
         }
-        public async Task<string> LoginAsync(LoginDTO loginDTO)
+        public Task<string> LoginAsync(LoginDTO loginDTO)
         {
             var account = Authenticate(loginDTO);
             if (account != null)
             {
                 var token = _generateToken.CalculateToken(account);
-                return token;
+                return Task.FromResult(token);
             }
-            return string.Empty;
+            return Task.FromResult(string.Empty);
         }
         private Account Authenticate(LoginDTO loginDTO)
         {

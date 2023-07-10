@@ -110,7 +110,6 @@ namespace LearningManagementSystemAPI.Services
 
             if (subject == null)
             {
-                // Xử lý khi không tìm thấy môn học
                 return null;
             }
 
